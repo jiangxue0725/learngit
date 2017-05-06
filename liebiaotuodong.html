@@ -1,0 +1,197 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>列表拖动</title>
+	<style>		
+		html,body{
+			width:100%;
+			height:100%;
+			margin:0;
+			padding:0;
+			background-color:#b1b1b1;
+			font-family: Arial,"Microsoft Yahei";
+			font-size:14px;
+			color:#666;
+			-webkit-user-select:none; 
+			-moz-user-select:none; 
+			-ms-user-select:none; 
+			user-select:none;
+		}
+		.ground{
+			width:500px;
+			height:400px;
+			margin-top:7%;
+			margin-left:33%;
+			border:1px solid #b7b7b7;
+			background-color:white;
+			padding:60px 25px;
+		}
+		.ground .list{
+			width:40%;
+			height:100%;
+			float:left;
+			border:1px solid #d9d9d9;
+			background-color:white;
+		}
+		.ground .list ul{
+			margin:0;
+			padding:0;
+			list-style:none;
+
+		}
+		.ground .list ul li{
+			width:200px;
+			height:35px;
+			text-indent: 10px;
+			line-height:35px;
+			
+		}
+		.ground .list ul li:hover {
+   			background-color: #039ae3;
+  			color: #fff;
+			cursor:pointer;
+		}
+		.ground .midList{
+			width:19%;
+			float:left;
+			background-color:white;
+			padding-top:30%;
+		}
+		.ground .midList a{
+			display:inline-block;
+			width:76%;
+			height:40px;
+			margin-left:11px;
+			margin-top:8px;
+			font-size:14px;
+			font-family: Arial,"Microsoft Yahei";
+			background-color:#f3f3f3;
+			border:1px solid #d9d9d9;
+			line-height:40px;
+			text-align:center;
+		}
+		.ground .midList a:hover{
+   			background-color: #039ae3;
+  			color: #fff;
+			cursor:pointer;
+		}
+		.clickedLi{
+			width:200px;
+			height:35px;
+			text-indent: 10px;
+			line-height:35px;
+  			background-color: #777777;
+  			color: #fff;
+		}
+		.clickedLiMove{
+			width:200px;
+			height:35px;
+			text-indent: 10px;
+			line-height:35px;
+  			background-color: #777777;
+  			color: #fff;
+			position:absolute;
+		}
+	</style>
+	</head>
+	<body>
+		<div id="leftList" class="ground">
+			<div  id="leftList" class="list">
+				<ul id="leftData">
+					<li>张三   15512357895</li>
+					<li>李四   15074651252</li>
+					<li>王二麻   133345984562</li>
+					<li>赵三四   16497851234</li>
+					<li>王五六   15649812365</li>
+					<li>周星驰   14756984256</li>
+					<li>王大妈   15697456250</li>
+				</ul>
+			</div>
+			<div class="midList">
+				<a id="addList">添加</a><br>
+				<a id="delList">删除</a>
+			</div>
+			<div  id="rightList" class="list">
+				<ul id="rightData"></ul>
+			</div>
+		</div>
+	</body>
+	<script>
+		window.onload = function(){
+			var ld = document.getElementById("leftData");
+			var rd = document.getElementById("rightData");
+			var ll = document.getElementById("leftList");
+			var rl = document.getElementById("rightList");
+			var add = document.getElementById("addList");
+			var del = document.getElementById("delList");
+			ld.addEventListener("click",function(event){
+				if(event.target.className == "clickedLi"){
+					event.target.className = "";
+				}else{
+					event.target.className = "clickedLi";
+				};
+			});
+			rd.addEventListener("click",function(event){
+				if(event.target.className == "clickedLi"){
+					event.target.className = "";
+				}else{
+					event.target.className = "clickedLi";
+				};
+				cancelBubble = true;
+			});
+			add.addEventListener("click",function(event){
+				for(i=0;i<ld.children.length;i++){
+					if(ld.children[i].className=="clickedLi"){
+						rd.appendChild(ld.children[i]);
+						i--;
+					}
+				}
+			});
+			del.addEventListener("click",function(event){
+				for(i=0;i<rd.children.length;i++){
+					if(rd.children[i].className=="clickedLi"){
+						ld.appendChild(rd.children[i]);
+						i--;
+					}
+				}
+			});
+			ld.addEventListener("dblclick",function(event){
+				var tar = event.target;
+				document.onmousemove = function(event){
+					tar.className = "clickedLiMove";
+					tar.style.left = (Number(event.clientX)+10)+"px";
+					tar.style.top = (Number(event.clientY)+10)+"px";
+				};
+				document.onclick = function(event){
+					if(event.target.id == "rightList"){
+						tar.className = "";
+						rd.appendChild(tar);
+						document.onmousemove = null;
+					}else{
+						tar.className = "";
+						document.onmousemove = null;
+					}					
+				}
+			});
+			rd.addEventListener("dblclick",function(event){
+				var tar = event.target;
+				document.onmousemove = function(event){
+					tar.className = "clickedLiMove";
+					tar.style.left = (Number(event.clientX)+10)+"px";
+					tar.style.top = (Number(event.clientY)+10)+"px";
+				};
+				document.onclick = function(event){
+					if(event.target.id == "leftList"){
+						tar.className = "";
+						ld.appendChild(tar);
+						document.onmousemove = null;
+					}else{
+						tar.className = "";
+						document.onmousemove = null;
+					}					
+				}
+			});
+		}
+	</script>
+</html>
